@@ -9,6 +9,26 @@ class HandoverModel extends HandoverEntity {
     required super.syncStatus,
   });
 
+  factory HandoverModel.fromEntity(HandoverEntity entity) {
+    return HandoverModel(
+      id: entity.id,
+      title: entity.title,
+      notes: entity.notes,
+      createdAt: entity.createdAt,
+      syncStatus: entity.syncStatus,
+    );
+  }
+
+  HandoverEntity toEntity() {
+    return HandoverEntity(
+      id: id,
+      title: title,
+      notes: notes,
+      createdAt: createdAt,
+      syncStatus: syncStatus,
+    );
+  }
+
   factory HandoverModel.fromJson(Map<String, dynamic> json) {
     return HandoverModel(
       id: json['id'] as String,

@@ -42,6 +42,7 @@ dependencies:
   firebase_storage: ^13.6.0
   intl: ^0.20.3
   hive_flutter: ^1.1.0
+  equatable: ^3.0.0
 
 dev_dependencies:
   flutter_test:
