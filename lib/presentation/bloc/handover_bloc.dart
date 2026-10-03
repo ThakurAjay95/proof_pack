@@ -42,11 +42,13 @@ class HandoverBloc extends Bloc<HandoverEvent, HandoverState> {
       );
 
       await createHandoverUseCase(event.handoverEntity);
+      List<HandoverEntity> handoversList = await getAllHandoversUseCase();
 
       emit(
         state.copyWith(
           handOverDataStatus: HandOverDataStatus.success,
           errorMessage: '',
+          handoverList: handoversList,
         ),
       );
     } catch (e) {

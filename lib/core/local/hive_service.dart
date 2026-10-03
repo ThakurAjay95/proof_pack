@@ -15,4 +15,10 @@ class HiveService {
     Hive.registerAdapter(HandoverPhotoModelAdapter());
     await Hive.openBox<HandoverPhotoModel>('handover_photos');
   }
+
+  static Box<HandoverModel> get handoverBox =>
+      Hive.box<HandoverModel>('handovers');
+
+  static Box<HandoverPhotoModel> get handoverPhotoBox =>
+      Hive.box<HandoverPhotoModel>('handover_photos');
 }

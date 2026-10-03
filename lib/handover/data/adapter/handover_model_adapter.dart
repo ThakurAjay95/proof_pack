@@ -9,7 +9,7 @@ class HandoverModelAdapter extends TypeAdapter<HandoverModel> {
       id: reader.readString(),
       title: reader.readString(),
       notes: reader.readString(),
-      createdAt: DateTime.fromMicrosecondsSinceEpoch(reader.readInt()),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(reader.readInt()),
       syncStatus: HandoverSyncStatus.values[reader.readInt()],
     );
   }

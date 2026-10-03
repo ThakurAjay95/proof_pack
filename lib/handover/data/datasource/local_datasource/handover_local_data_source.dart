@@ -8,6 +8,7 @@ class HandoverLocalDataSource {
 
   Future<void> save(HandoverModel handover) async {
     await box.put(handover.id, handover);
+    await box.flush();
   }
 
   Future<HandoverModel?> getById(String id) async {
