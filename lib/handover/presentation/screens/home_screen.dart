@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
           //Add events records
           await Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => CreateHandoverScreen(),
+              builder: (context) => CreateHandoverScreen(null),
             ),
           );
         },

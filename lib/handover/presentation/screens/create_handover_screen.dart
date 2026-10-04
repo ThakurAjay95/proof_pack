@@ -7,7 +7,9 @@ import 'package:proof_pack/presentation/bloc/handover_state.dart';
 import 'package:uuid/uuid.dart';
 
 class CreateHandoverScreen extends StatefulWidget {
-  const CreateHandoverScreen({super.key});
+  final HandoverEntity? entity;
+
+  const CreateHandoverScreen(this.entity, {super.key});
 
   @override
   State<CreateHandoverScreen> createState() => _CreateHandoverScreenState();
@@ -16,6 +18,7 @@ class CreateHandoverScreen extends StatefulWidget {
 class _CreateHandoverScreenState extends State<CreateHandoverScreen> {
   late final TextEditingController _titleController;
   late final TextEditingController _notesController;
+  HandoverEntity? updatedHandover;
 
   @override
   void initState() {
@@ -23,6 +26,11 @@ class _CreateHandoverScreenState extends State<CreateHandoverScreen> {
     super.initState();
     _titleController = TextEditingController();
     _notesController = TextEditingController();
+
+    if (widget.entity != null) {
+      _titleController.text = widget.entity!.title;
+      _notesController.text = widget.entity!.notes;
+    }
   }
 
   void _submitHandoverRecord() {
@@ -32,16 +40,28 @@ class _CreateHandoverScreenState extends State<CreateHandoverScreen> {
     if (title.isEmpty) {
       return;
     }
+    if (widget.entity != null) {
+      updatedHandover = HandoverEntity(
+        id: widget.entity!.id,
+        title: _titleController.text,
+        notes: _notesController.text,
+        createdAt: widget.entity!.createdAt,
+        syncStatus: HandoverSyncStatus.pending,
+      );
+    }
+
     context.read<HandoverBloc>().add(
-      CreateHandoverEvent(
-        HandoverEntity(
-          id: Uuid().v4(),
-          title: title,
-          notes: notes,
-          createdAt: DateTime.now(),
-          syncStatus: HandoverSyncStatus.pending,
-        ),
-      ),
+      widget.entity != null
+          ? CreateHandoverEvent(updatedHandover!)
+          : CreateHandoverEvent(
+              HandoverEntity(
+                id: Uuid().v4(),
+                title: title,
+                notes: notes,
+                createdAt: DateTime.now(),
+                syncStatus: HandoverSyncStatus.pending,
+              ),
+            ),
     );
   }
 
@@ -50,7 +70,7 @@ class _CreateHandoverScreenState extends State<CreateHandoverScreen> {
     return BlocConsumer<HandoverBloc, HandoverState>(
       listener: (context, state) {
         if (state.handOverDataStatus == HandOverDataStatus.success) {
-          Navigator.pop(context, "success");
+          Navigator.pop(context, updatedHandover ?? "result");
         } else if (state.handOverDataStatus == HandOverDataStatus.failed) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -61,12 +81,16 @@ class _CreateHandoverScreenState extends State<CreateHandoverScreen> {
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(title: Text("Create Handover")),
+          appBar: AppBar(
+            title: Text(
+              widget.entity != null ? "Update Handover" : "Create Handover",
+            ),
+          ),
           body: Center(
             child: state.handOverDataStatus == HandOverDataStatus.loading
                 ? CircularProgressIndicator()
                 : Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(15.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -77,6 +101,8 @@ class _CreateHandoverScreenState extends State<CreateHandoverScreen> {
                         ),
                         SizedBox(height: 10),
                         TextFormField(
+                          minLines: 1,
+                          maxLines: 3,
                           controller: _notesController,
                           decoration: InputDecoration(labelText: "Notes"),
                         ),

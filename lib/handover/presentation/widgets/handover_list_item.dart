@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:proof_pack/handover/domain/entity/handover_entity.dart';
+import 'package:proof_pack/handover/presentation/screens/handover_details_screen.dart';
 
 class HandoverListItem extends StatelessWidget {
   final HandoverEntity handoverEntity;
@@ -10,11 +11,27 @@ class HandoverListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
       child: Card(
         child: ListTile(
-          title: Text(handoverEntity.title),
-          subtitle: Text(handoverEntity.notes),
+          onTap: () async {
+            //Add events records
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => HandoverDetailsScreen(handoverEntity),
+              ),
+            );
+          },
+          title: Text(
+            handoverEntity.title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          subtitle: Text(
+            handoverEntity.notes,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ),
     );
