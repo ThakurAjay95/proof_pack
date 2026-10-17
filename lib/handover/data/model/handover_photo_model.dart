@@ -1,13 +1,33 @@
 import 'package:proof_pack/handover/domain/entity/handover_photo_entity.dart';
 
 class HandoverPhotoModel extends HandoverPhotoEntity {
-   HandoverPhotoModel({
+  HandoverPhotoModel({
     required super.id,
     required super.handoverId,
     required super.localPath,
     super.remotePath,
     required super.syncStatus,
   });
+
+  factory HandoverPhotoModel.fromEntity(HandoverPhotoEntity entity) {
+    return HandoverPhotoModel(
+      id: entity.id,
+      handoverId: entity.handoverId,
+      localPath: entity.localPath,
+      syncStatus: entity.syncStatus,
+      remotePath: entity.remotePath,
+    );
+  }
+
+  HandoverPhotoEntity toEntity() {
+    return HandoverPhotoEntity(
+      id: id,
+      handoverId: handoverId,
+      localPath: localPath,
+      syncStatus: syncStatus,
+      remotePath: remotePath,
+    );
+  }
 
   factory HandoverPhotoModel.fromJson(Map<String, dynamic> json) {
     return HandoverPhotoModel(

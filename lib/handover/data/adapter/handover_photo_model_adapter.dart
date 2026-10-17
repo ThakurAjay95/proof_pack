@@ -5,12 +5,24 @@ import 'package:proof_pack/handover/domain/entity/handover_photo_entity.dart';
 class HandoverPhotoModelAdapter extends TypeAdapter<HandoverPhotoModel> {
   @override
   HandoverPhotoModel read(BinaryReader reader) {
+    final id = reader.readString();
+    final handoverId = reader.readString();
+    final localPath = reader.readString();
+    
+    final hasRemotePath = reader.readBool();
+    String? remotePath;
+    if (hasRemotePath) {
+      remotePath = reader.readString();
+    }
+    
+    final syncStatus = HandoverPhotoSyncStatus.values[reader.readInt()];
+
     return HandoverPhotoModel(
-      id: reader.readString(),
-      handoverId: reader.readString(),
-      localPath: reader.readString(),
-      remotePath: reader.readString() as String?,
-      syncStatus: HandoverPhotoSyncStatus.values[reader.readInt()],
+      id: id,
+      handoverId: handoverId,
+      localPath: localPath,
+      remotePath: remotePath,
+      syncStatus: syncStatus,
     );
   }
 
@@ -22,7 +34,13 @@ class HandoverPhotoModelAdapter extends TypeAdapter<HandoverPhotoModel> {
     writer.writeString(obj.id);
     writer.writeString(obj.handoverId);
     writer.writeString(obj.localPath);
-    writer.write(obj.remotePath);
+    
+    final hasRemotePath = obj.remotePath != null;
+    writer.writeBool(hasRemotePath);
+    if (hasRemotePath) {
+      writer.writeString(obj.remotePath!);
+    }
+    
     writer.writeInt(obj.syncStatus.index);
   }
 }

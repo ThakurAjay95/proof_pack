@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:proof_pack/handover/presentation/screens/create_handover_screen.dart';
 import 'package:proof_pack/handover/presentation/widgets/handover_list_item.dart';
-import 'package:proof_pack/presentation/bloc/handover_bloc.dart';
-import 'package:proof_pack/presentation/bloc/handover_state.dart';
+import 'package:proof_pack/handover/presentation/bloc/handover_bloc.dart';
 
 import '../../../core/local/hive_service.dart';
 import '../../data/datasource/local_datasource/handover_local_data_source.dart';
 import '../../data/repository/handover_repository_impl.dart';
+import '../bloc/handover_state.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -33,14 +33,14 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(title: Text("ProofPack")),
       body: BlocBuilder<HandoverBloc, HandoverState>(
         builder: (context, state) {
-          if (state.handOverDataStatus == HandOverDataStatus.loading) {
+          if (state.status == HandOverDataStatus.loading) {
             return Center(child: CircularProgressIndicator());
-          } else if (state.handOverDataStatus == HandOverDataStatus.failed) {
+          } else if (state.status == HandOverDataStatus.failed) {
             return Center(
               child: Text(state.errorMessage ?? 'Something went wrong'),
             );
           }
-          if (state.handOverDataStatus == HandOverDataStatus.success) {
+          if (state.status == HandOverDataStatus.success) {
             return state.handoverList.isEmpty
                 ? Center(child: Text("No handovers yet!"))
                 : ListView.builder(
@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
           //Add events records
           await Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => CreateHandoverScreen(null),
+              builder: (context) => CreateHandoverScreen(null, null),
             ),
           );
         },
