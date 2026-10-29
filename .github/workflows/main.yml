@@ -36,9 +36,9 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-#      # 5. Run code analyzer / linter (optional, but recommended)
-#      - name: Analyze code
-#        run: flutter analyze
+      #      # 5. Run code analyzer / linter (optional, but recommended)
+      #      - name: Analyze code
+      #        run: flutter analyze
 
       # 6. Run unit and widget tests
       - name: Run tests
@@ -47,4 +47,12 @@ jobs:
       # 7. Build Android APK
       - name: Build APK
         run: flutter build apk --release
+
+      # 8. Upload the built APK so you can download it from GitHub
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
 
