@@ -25,7 +25,6 @@ class HandoverPhotoRepositoryImpl implements HandoverPhotoRepository{
   @override
   Future<List<HandoverPhotoEntity>> getPhotos(String handoverId) async {
     final models = await _handoverPhotosLocalDataSource.getByHandoverId(handoverId);
-    print("getPhtotos ${models.map((models)=> models.toEntity()).toList().length}");
     return models.map((models)=> models.toEntity()).toList();
   }
 

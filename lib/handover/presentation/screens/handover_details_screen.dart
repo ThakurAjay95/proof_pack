@@ -20,7 +20,6 @@ class HandoverDetailsScreen extends StatefulWidget {
 }
 
 class _HandoverDetailsScreenState extends State<HandoverDetailsScreen> {
-  @override
   late HandoverEntity _handover;
 
   @override
